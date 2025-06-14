@@ -32,16 +32,16 @@ export const FavoritesProvider: React.FC<{children: React.ReactNode}> = ({ child
   }, [favoriteIds]);
 
   const toggleFavorite = (productId: number) => {
-    setFavoriteIds(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(productId)) {
-        newSet.delete(productId);
-      } else {
-        newSet.add(productId);
-      }
-      return newSet;
-    });
-  };
+  setFavoriteIds(prev => {
+    const updated = new Set(prev);
+    if (updated.has(productId)) {
+      updated.delete(productId);
+    } else {
+      updated.add(productId);
+    }
+    return new Set(updated); // ensure new reference
+  });
+};
 
   const isFavorite = (productId: number) => favoriteIds.has(productId);
 

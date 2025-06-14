@@ -12,12 +12,15 @@ import SignupPage from './pages/SignupPage';
 import UserDashboardPage from './pages/UserDashboardPage';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { FavoritesProvider } from './context/FavoritesContext';
 import './App.css';
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
+        <FavoritesProvider>
+
         <Router>
           <div className="flex flex-col min-h-screen">
             <Navbar />
@@ -36,6 +39,7 @@ function App() {
             <Footer />
           </div>
         </Router>
+                </FavoritesProvider>
       </CartProvider>
     </AuthProvider>
   );

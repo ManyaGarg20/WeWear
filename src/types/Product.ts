@@ -1,5 +1,6 @@
 export interface Product {
   id: number;
+  name: string;
   title: string;
   description: string;
   price: number;
@@ -15,5 +16,4 @@ export interface Product {
   sellerRating: number;
   isFavorite: boolean;
   createdAt: string;
-  name: string;
 }

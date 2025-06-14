@@ -1,6 +1,7 @@
 import { Product } from '../types/Product';
 import { User } from '../types/User';
 
+
 // Mock Products
 export const mockProducts: Product[] = [
   {

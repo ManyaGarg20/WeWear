@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Product } from '../types/Product';
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import {  fetchProductById } from '../data/mockApi';
 
 const ProductPage: React.FC = () => {
   const { addToCart } = useCart();
@@ -10,31 +11,17 @@ const ProductPage: React.FC = () => {
   const [product, setProduct] = React.useState<Product | null>(null);
   const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
+  const fetchProduct = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setProduct({
-        id:1 ,
-        title: "Sample Product",
-        name: "Sample Product",
-        description: "This is a detailed description of the product. It includes information about features, materials, and usage.",
-        price: 99.99,
-        imageUrl: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        category: "Sample Category",
-        brand: "Sample Brand",
-        size: "M",
-        condition: "New",
-        colors: ["Red", "Blue"],
-        location: "New York",
-        sellerId: "1",
-        sellerName: "Sample Seller",
-        sellerRating: 4.5,
-        isFavorite: false,
-        createdAt: new Date().toISOString(),
-      });
-      setLoading(false);
-    }, 1000);
-  }, [id]);
+    if (id) {
+      const fetched = await fetchProductById(Number(id));
+      setProduct(fetched ?? null);
+    }
+    setLoading(false);
+  };
+  fetchProduct();
+}, [id]);
 
   if (loading) {
     return (
