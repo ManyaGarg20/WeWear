@@ -31,6 +31,15 @@ export const FavoritesProvider: React.FC<{children: React.ReactNode}> = ({ child
     localStorage.setItem('favorites', JSON.stringify(Array.from(favoriteIds)));
   }, [favoriteIds]);
 
+  // Clear favorites on logout
+  useEffect(() => {
+    const handleLogout = () => {
+      setFavoriteIds(new Set());
+    };
+    window.addEventListener('logout', handleLogout);
+    return () => window.removeEventListener('logout', handleLogout);
+  }, []);
+
   const toggleFavorite = (productId: number) => {
   setFavoriteIds(prev => {
     const updated = new Set(prev);

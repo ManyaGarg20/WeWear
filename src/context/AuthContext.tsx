@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
        id: user.uid,
       name: user.displayName || "",
       email: user.email || "",
-      profileImage: user.photoURL || "", // ✅ correct field from your User type
+      profileImage: user.photoURL || "", 
       rating: 0,
       reviewCount: 0,
       isSeller: false,
@@ -144,6 +144,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('user');
+    localStorage.removeItem('cart');
+    localStorage.removeItem('favorites');
+    window.dispatchEvent(new CustomEvent('logout'));
   };
 
   const value: AuthContextType = {

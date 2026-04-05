@@ -45,6 +45,15 @@ export const CartProvider: React.FC<{children: React.ReactNode}>= ({ children })
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  // Clear cart on logout
+  useEffect(() => {
+    const handleLogout = () => {
+      setCartItems([]);
+    };
+    window.addEventListener('logout', handleLogout);
+    return () => window.removeEventListener('logout', handleLogout);
+  }, []);
+
   const addToCart = (product: Product, quantity = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
