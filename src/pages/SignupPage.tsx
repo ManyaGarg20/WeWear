@@ -1,32 +1,76 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth, db } from '../context/Firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 const SignupPage: React.FC = () => {
-  const { signup, loading, error } = useAuth();
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    isSeller: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { name, email, password, isSeller } = formData;
-    await signup(name, email, password, isSeller);
-    if (!error) {
-      navigate('/dashboard');
+    setLoading(true);
+    try {
+      const result = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = result.user;
+      await setDoc(doc(db, 'users', user.uid), {
+        id: user.uid,
+        name: formData.name,
+        email: user.email,
+        isSeller: false,
+        bio: '',
+        location: '',
+        rating: 0,
+        reviewCount: 0,
+        profileImage: '',
+        createdAt: new Date().toISOString(),
+      });
+      navigate('/complete-profile');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      await setDoc(doc(db, 'users', user.uid), {
+        id: user.uid,
+        name: user.displayName || '',
+        email: user.email,
+        isSeller: false,
+        bio: '',
+        location: '',
+        rating: 0,
+        reviewCount: 0,
+        profileImage: user.photoURL || '',
+        createdAt: new Date().toISOString(),
+      });
+      navigate('/complete-profile');
+    } catch (err: any) {
+      setError('Google sign-up failed.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,7 +79,7 @@ const SignupPage: React.FC = () => {
       <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Create an Account</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleEmailSignup} className="space-y-5">
           <div>
             <label className="block mb-1 text-gray-600">Name</label>
             <input
@@ -69,16 +113,6 @@ const SignupPage: React.FC = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="isSeller"
-              checked={formData.isSeller}
-              onChange={handleChange}
-              className="mr-2"
-            />
-            <label className="text-gray-700">I want to sell products</label>
-          </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
@@ -87,9 +121,19 @@ const SignupPage: React.FC = () => {
             disabled={loading}
             className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition disabled:opacity-50"
           >
-            {loading ? 'Signing up...' : 'Sign Up'}
+            {loading ? 'Signing up...' : 'Sign Up with Email'}
           </button>
         </form>
+
+        <div className="mt-4 text-center">
+          <button
+            onClick={handleGoogleSignup}
+            disabled={loading}
+            className="w-full py-2 px-4 mt-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition disabled:opacity-50"
+          >
+            {loading ? 'Please wait...' : 'Sign Up with Google'}
+          </button>
+        </div>
 
         <p className="mt-4 text-center text-sm text-gray-600">
           Already have an account?{' '}

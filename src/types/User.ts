@@ -9,4 +9,5 @@ export interface User {
   reviewCount: number;
   isSeller: boolean;
   createdAt: string;
-}
+
+  }

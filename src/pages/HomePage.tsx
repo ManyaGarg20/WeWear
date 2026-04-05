@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, Search } from 'lucide-react';
 import ProductGrid from '../components/product/ProductGrid';
 import { mockProducts } from '../data/mockData';
 
 const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  
+  const [searchParams] = useSearchParams();
+  const currentCategory = searchParams.get('category')?.toLowerCase();
+
+  const isActive = (category: string) => {
+    return currentCategory === category.toLowerCase();
+  };
   // Featured products - show first 8 from mock data
   const featuredProducts = mockProducts.slice(0, 8);
 
@@ -82,25 +87,29 @@ const HomePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <CategoryCard 
-              title="Women" 
-              imageUrl="https://images.pexels.com/photos/7691168/pexels-photo-7691168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
-              link="/browse?category=women" 
+            <CategoryCard
+              title="Women"
+              imageUrl="https://images.pexels.com/photos/7691168/pexels-photo-7691168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+              link="/browse?category=women"
+              isActive={isActive('women')}
             />
-            <CategoryCard 
-              title="Men" 
-              imageUrl="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
-              link="/browse?category=men" 
+            <CategoryCard
+              title="Men"
+              imageUrl="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+              link="/browse?category=men"
+              isActive={isActive('men')}
             />
-            <CategoryCard 
-              title="Kids" 
-              imageUrl="https://images.pexels.com/photos/5622858/pexels-photo-5622858.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
-              link="/browse?category=kids" 
+            <CategoryCard
+              title="Kids"
+              imageUrl="https://images.pexels.com/photos/5622858/pexels-photo-5622858.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+              link="/browse?category=kids"
+              isActive={isActive('kids')}
             />
-            <CategoryCard 
-              title="Accessories" 
-              imageUrl="https://images.pexels.com/photos/1927259/pexels-photo-1927259.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
-              link="/browse?category=accessories" 
+            <CategoryCard
+              title="Accessories"
+              imageUrl="https://images.pexels.com/photos/1927259/pexels-photo-1927259.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+              link="/browse?category=accessories"
+              isActive={isActive('accessories')}
             />
           </div>
         </div>
@@ -241,18 +250,19 @@ interface CategoryCardProps {
   title: string;
   imageUrl: string;
   link: string;
+  isActive: boolean;
 }
 
-const CategoryCard: React.FC<CategoryCardProps> = ({ title, imageUrl, link }) => {
+const CategoryCard: React.FC<CategoryCardProps> = ({ title, imageUrl, link, isActive }) => {
   return (
-    <Link to={link} className="relative overflow-hidden rounded-lg group block h-48 md:h-64">
-      <div 
-        className="absolute inset-0 bg-center bg-cover transform group-hover:scale-110 transition-transform duration-500" 
+    <Link to={link} className={`relative overflow-hidden rounded-lg group block h-48 md:h-64 ${isActive ? 'ring-4 ring-indigo-600' : ''}`}>
+      <div
+        className="absolute inset-0 bg-center bg-cover transform group-hover:scale-110 transition-transform duration-500"
         style={{ backgroundImage: `url(${imageUrl})` }}
       ></div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20"></div>
       <div className="absolute bottom-0 left-0 p-4 w-full">
-        <h3 className="text-white text-xl font-bold">{title}</h3>
+        <h3 className={`text-white text-xl ${isActive ? 'font-bold' : 'font-bold'}`}>{title}</h3>
       </div>
     </Link>
   );

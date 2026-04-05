@@ -1,8 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ShoppingBag, Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const currentCategory = searchParams.get('category')?.toLowerCase();
+
+  const isActive = (category: string) => {
+    return currentCategory === category.toLowerCase();
+  };
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="container mx-auto px-4 py-12">
@@ -32,27 +38,27 @@ const Footer: React.FC = () => {
             <h3 className="text-white font-semibold text-lg mb-4">Shop</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/browse?category=women" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/browse?category=women" className={`transition-colors ${isActive('women') ? 'text-white font-bold' : 'text-gray-400 hover:text-white'}`}>
                   Women
                 </Link>
               </li>
               <li>
-                <Link to="/browse?category=men" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/browse?category=men" className={`transition-colors ${isActive('men') ? 'text-white font-bold' : 'text-gray-400 hover:text-white'}`}>
                   Men
                 </Link>
               </li>
               <li>
-                <Link to="/browse?category=kids" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/browse?category=kids" className={`transition-colors ${isActive('kids') ? 'text-white font-bold' : 'text-gray-400 hover:text-white'}`}>
                   Kids
                 </Link>
               </li>
               <li>
-                <Link to="/browse?category=accessories" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/browse?category=accessories" className={`transition-colors ${isActive('accessories') ? 'text-white font-bold' : 'text-gray-400 hover:text-white'}`}>
                   Accessories
                 </Link>
               </li>
               <li>
-                <Link to="/browse?category=shoes" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/browse?category=shoes" className={`transition-colors ${isActive('shoes') ? 'text-white font-bold' : 'text-gray-400 hover:text-white'}`}>
                   Shoes
                 </Link>
               </li>

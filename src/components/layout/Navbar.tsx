@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Search, User, ShoppingBag, Menu, X, Heart, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { useFavorites } from '../../context/FavoritesContext';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchParams] = useSearchParams();
+  const { pathname } = useLocation();
+  const { favoriteIds } = useFavorites();
   const { isAuthenticated, user, logout } = useAuth();
   const { cartItems } = useCart();
   const navigate = useNavigate();
+
+  const currentCategory = searchParams.get('category')?.toLowerCase();
+
+  const isActive = (category: string | null) => {
+    if (category === null) {
+      return pathname === '/browse' && (currentCategory === null || currentCategory === undefined);
+    }
+    return pathname === '/browse' && currentCategory === category.toLowerCase();
+  };
 
   const handleLogout = () => {
     logout();
@@ -27,13 +40,13 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/browse" className="text-gray-700 hover:text-indigo-600 transition-colors">Browse</Link>
-            <Link to="/browse?category=women" className="text-gray-700 hover:text-indigo-600 transition-colors">Women</Link>
-            <Link to="/browse?category=men" className="text-gray-700 hover:text-indigo-600 transition-colors">Men</Link>
-            <Link to="/browse?category=kids" className="text-gray-700 hover:text-indigo-600 transition-colors">Kids</Link>
+            <Link to="/browse" className={`transition-colors ${isActive(null) ? 'text-indigo-600 font-bold' : 'text-gray-700 hover:text-indigo-600'}`}>Browse</Link>
+            <Link to="/browse?category=women" className={`transition-colors ${isActive('women') ? 'text-indigo-600 font-bold' : 'text-gray-700 hover:text-indigo-600'}`}>Women</Link>
+            <Link to="/browse?category=men" className={`transition-colors ${isActive('men') ? 'text-indigo-600 font-bold' : 'text-gray-700 hover:text-indigo-600'}`}>Men</Link>
+            <Link to="/browse?category=kids" className={`transition-colors ${isActive('kids') ? 'text-indigo-600 font-bold' : 'text-gray-700 hover:text-indigo-600'}`}>Kids</Link>
           </nav>
 
-          {/* Icons + Auth */}
+          {/* search icon navbar */}
           <div className="hidden md:flex items-center space-x-6">
             <div className="relative">
               <input
@@ -44,10 +57,17 @@ const Navbar: React.FC = () => {
               <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
 
-            <Link to="/favorites" className="text-gray-700 hover:text-indigo-600">
-              <Heart className="h-6 w-6" />
-            </Link>
+{/* favourites icon on navbar */}
+            <Link to="/favorites" className="relative text-gray-700 hover:text-indigo-600">
+  <Heart className="h-6 w-6" />
+  {favoriteIds.size > 0 && (
+    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+      {favoriteIds.size}
+    </span>
+  )}
+</Link>
 
+{/* add to cart icon on navbar */}
             <Link to="/cart" className="relative text-gray-700 hover:text-indigo-600">
               <ShoppingBag className="h-6 w-6" />
               {cartItems.length > 0 && (

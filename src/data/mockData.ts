@@ -273,3 +273,12 @@ export const mockUsers: User[] = [
     createdAt: '2022-04-22T11:20:00Z',
   },
 ];
+
+export const initializeMockData = () => {
+  if (!localStorage.getItem('mockUsers')) {
+    localStorage.setItem('mockUsers', JSON.stringify(mockUsers));
+  }
+  if (!localStorage.getItem('mockProducts')) {
+    localStorage.setItem('mockProducts', JSON.stringify(mockProducts));
+  }
+};

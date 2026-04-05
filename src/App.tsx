@@ -13,6 +13,7 @@ import UserDashboardPage from './pages/UserDashboardPage';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider } from './context/FavoritesContext';
+import FavoritesPage from './pages/Favorites';
 import './App.css';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/seller/:id" element={<SellerProfilePage />} />
                 <Route path="/cart" element={<CartPage />} />
+                <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/dashboard" element={<UserDashboardPage />} />

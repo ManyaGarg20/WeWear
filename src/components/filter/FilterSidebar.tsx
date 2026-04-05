@@ -144,7 +144,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                       onChange={() => onFilterChange(category.name, option)}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-gray-700">{option}</span>
+                    <span className={`ml-2 transition-all ${selectedFilters[category.name]?.includes(option) ? 'text-indigo-600 font-bold' : 'text-gray-700'}`}>{option}</span>
                   </label>
                 ))}
               </div>
