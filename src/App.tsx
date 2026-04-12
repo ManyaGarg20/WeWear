@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -14,9 +15,14 @@ import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import FavoritesPage from './pages/Favorites';
+import { initializeMockData } from './data/mockData';
 import './App.css';
 
 function App() {
+  // Initialize mock data on app start
+  React.useEffect(() => {
+    initializeMockData();
+  }, []);
   return (
     <AuthProvider>
       <CartProvider>

@@ -86,8 +86,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError('User not found');
         return;
       }
-      localStorage.setItem('user', JSON.stringify(existingUser));
-      setUser(existingUser);
+      if (existingUser.password && existingUser.password !== password) {
+        setError('Invalid password');
+        return;
+      }
+      const safeUser = { ...existingUser } as User;
+      delete (safeUser as Partial<User>).password;
+      localStorage.setItem('user', JSON.stringify(safeUser));
+      setUser(safeUser);
       setIsAuthenticated(true);
       setError(null);
     } catch {
@@ -117,6 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: uuidv4(),
         name,
         email,
+        password,
         rating: 0,
         reviewCount: 0,
         isSeller,
@@ -128,8 +135,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const updatedUsers = [...storedUsers, newUser];
       localStorage.setItem('mockUsers', JSON.stringify(updatedUsers));
-      localStorage.setItem('user', JSON.stringify(newUser));
-      setUser(newUser);
+      const safeUser = { ...newUser } as User;
+      delete (safeUser as Partial<User>).password;
+      localStorage.setItem('user', JSON.stringify(safeUser));
+      setUser(safeUser);
       setIsAuthenticated(true);
       setError(null);
     } catch {

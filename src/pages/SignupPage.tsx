@@ -1,76 +1,37 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth, db } from '../context/Firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const SignupPage: React.FC = () => {
   const navigate = useNavigate();
+  const { signup, googleLogin, loading, error, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
+    isSeller: false,
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const result = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      const user = result.user;
-      await setDoc(doc(db, 'users', user.uid), {
-        id: user.uid,
-        name: formData.name,
-        email: user.email,
-        isSeller: false,
-        bio: '',
-        location: '',
-        rating: 0,
-        reviewCount: 0,
-        profileImage: '',
-        createdAt: new Date().toISOString(),
-      });
-      navigate('/complete-profile');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    await signup(formData.name, formData.email, formData.password, formData.isSeller);
+    if (!error) {
+      navigate('/dashboard');
     }
   };
 
   const handleGoogleSignup = async () => {
-    setLoading(true);
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      await setDoc(doc(db, 'users', user.uid), {
-        id: user.uid,
-        name: user.displayName || '',
-        email: user.email,
-        isSeller: false,
-        bio: '',
-        location: '',
-        rating: 0,
-        reviewCount: 0,
-        profileImage: user.photoURL || '',
-        createdAt: new Date().toISOString(),
-      });
-      navigate('/complete-profile');
-    } catch (err: any) {
-      setError('Google sign-up failed.');
-    } finally {
-      setLoading(false);
+    await googleLogin();
+    if (!error) {
+      navigate('/dashboard');
     }
   };
 
@@ -114,6 +75,17 @@ const SignupPage: React.FC = () => {
             />
           </div>
 
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              name="isSeller"
+              checked={formData.isSeller}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            <label className="text-gray-600">I want to sell items on this platform</label>
+          </div>
+
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
@@ -137,7 +109,7 @@ const SignupPage: React.FC = () => {
 
         <p className="mt-4 text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <a href="/login" className="text-blue-600 hover:underline">Log in</a>
+          <Link to="/login" className="text-blue-600 hover:underline">Log in</Link>
         </p>
       </div>
     </div>
