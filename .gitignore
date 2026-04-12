@@ -35,8 +35,6 @@ dist-ssr
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
-src/context/Firebase.ts
-
 # Build outputs
 build/
 .next/
