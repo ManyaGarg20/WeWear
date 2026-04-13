@@ -44,6 +44,7 @@ const Navbar: React.FC = () => {
             <Link to="/browse?category=women" className={`transition-colors ${isActive('women') ? 'text-indigo-600 font-bold' : 'text-gray-700 hover:text-indigo-600'}`}>Women</Link>
             <Link to="/browse?category=men" className={`transition-colors ${isActive('men') ? 'text-indigo-600 font-bold' : 'text-gray-700 hover:text-indigo-600'}`}>Men</Link>
             <Link to="/browse?category=kids" className={`transition-colors ${isActive('kids') ? 'text-indigo-600 font-bold' : 'text-gray-700 hover:text-indigo-600'}`}>Kids</Link>
+            <Link to="/become-seller" className="text-gray-700 hover:text-indigo-600 transition-colors font-medium">Sell with Us</Link>
           </nav>
 
           {/* search icon navbar */}
@@ -111,6 +112,13 @@ const Navbar: React.FC = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4 animate-fade-in">
             {/* ...same as before... */}
+            <Link to="/browse" className="block text-gray-700 hover:text-indigo-600 py-2" onClick={() => setIsMenuOpen(false)}>Browse</Link>
+            <Link to="/browse?category=women" className="block text-gray-700 hover:text-indigo-600 py-2" onClick={() => setIsMenuOpen(false)}>Women</Link>
+            <Link to="/browse?category=men" className="block text-gray-700 hover:text-indigo-600 py-2" onClick={() => setIsMenuOpen(false)}>Men</Link>
+            <Link to="/browse?category=kids" className="block text-gray-700 hover:text-indigo-600 py-2" onClick={() => setIsMenuOpen(false)}>Kids</Link>
+            <Link to="/become-seller" className="block text-gray-700 hover:text-indigo-600 py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Sell with Us</Link>
+            
+            <div className="border-t mt-4 pt-4">
             {isAuthenticated ? (
               <>
                 <Link
@@ -135,12 +143,13 @@ const Navbar: React.FC = () => {
             ) : (
               <Link
                 to="/login"
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-700 transition-colors text-center mt-2"
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-700 transition-colors text-center mt-2 block"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Sign In
               </Link>
             )}
+            </div>
           </div>
         )}
       </div>

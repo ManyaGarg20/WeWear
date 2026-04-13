@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Product } from '../types/Product';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Heart, Minus, Plus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import {  fetchProductById } from '../data/mockApi';
 import { useFavorites } from '../context/FavoritesContext';
-import { Heart } from 'lucide-react';
 
 const ProductPage: React.FC = () => {
-  const { addToCart } = useCart();
+  const { addToCart, updateQuantity, getItemQuantity, isInCart } = useCart();
   const { id } = useParams();
   const { toggleFavorite, isFavorite } = useFavorites();
   const [product, setProduct] = React.useState<Product | null>(null);
   const [loading, setLoading] = React.useState(true);
+  const cartQuantity = product ? getItemQuantity(product.id) : 0;
+  const inCart = product ? isInCart(product.id) : false;
 
   useEffect(() => {
   const fetchProduct = async () => {
@@ -63,14 +64,36 @@ const ProductPage: React.FC = () => {
                   <h2 className="text-3xl font-bold text-gray-900">{product.name}</h2>
                   <p className="mt-2 text-2xl text-gray-900">${product.price.toFixed(2)}</p>
                 </div>
- <div className="flex flex-wrap gap-4 mt-4">
-  <button
-    onClick={() => addToCart(product)}
-    className="flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-  >
-    <ShoppingCart className="mr-2 h-5 w-5" />
-    Add to Cart
-  </button>
+              </div>
+
+              <div className="flex flex-wrap gap-4 mt-4">
+  {!inCart ? (
+    <button
+      onClick={() => addToCart(product)}
+      className="flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    >
+      <ShoppingCart className="mr-2 h-5 w-5" />
+      Add to Cart
+    </button>
+  ) : (
+    <div className="flex items-center gap-2 px-4 py-3 bg-blue-600 text-white font-medium rounded-md">
+      <button
+        onClick={() => updateQuantity(product.id, cartQuantity - 1)}
+        className="p-1 hover:bg-blue-500 rounded transition-colors"
+      >
+        <Minus className="h-4 w-4" />
+      </button>
+      <span className="w-8 text-center">{cartQuantity}</span>
+      {cartQuantity > 1 && (
+        <button
+          onClick={() => updateQuantity(product.id, cartQuantity + 1)}
+          className="p-1 hover:bg-blue-500 rounded transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+        </button>
+      )}
+    </div>
+  )}
 
   <button
     onClick={() => toggleFavorite(product.id)}
@@ -83,7 +106,6 @@ const ProductPage: React.FC = () => {
     <Heart className="mr-2 h-5 w-5" fill={isFavorite(product.id) ? 'white' : 'none'} />
     {isFavorite(product.id) ? 'Remove from Favorites' : 'Add to Favorites'}
   </button>
-</div>
               </div>
               
               <div className="mt-6">

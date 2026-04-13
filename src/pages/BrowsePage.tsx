@@ -5,6 +5,7 @@ import ProductGrid from '../components/product/ProductGrid';
 import FilterSidebar from '../components/filter/FilterSidebar';
 import { mockProducts } from '../data/mockData';
 import { Product } from '../types/Product';
+import { useFavorites } from '../context/FavoritesContext';
 
 const BrowsePage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -15,6 +16,7 @@ const BrowsePage: React.FC = () => {
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState<string>('relevance');
+  const { toggleFavorite } = useFavorites();
 
   // Get category from URL if it exists
   const categoryFromUrl = searchParams.get('category');
@@ -140,16 +142,6 @@ const BrowsePage: React.FC = () => {
   const handleClearFilters = () => {
     setSelectedFilters({});
     setPriceRange([0, 500]);
-  };
-
-  const toggleFavorite = (productId: number) => {
-    setProducts(prev => 
-      prev.map(product => 
-        product.id === productId 
-          ? { ...product, isFavorite: !product.isFavorite } 
-          : product
-      )
-    );
   };
 
   // Count active filters

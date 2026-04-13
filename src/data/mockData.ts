@@ -58,7 +58,7 @@ export const mockProducts: Product[] = [
     sellerId: '3',
     sellerName: 'Taylor Wong',
     sellerRating: 4.9,
-    isFavorite: true,
+    isFavorite: false,
     createdAt: '2023-10-13T11:20:00Z',
   },
   {
@@ -134,7 +134,7 @@ export const mockProducts: Product[] = [
     sellerId: '7',
     sellerName: 'Ryan Miller',
     sellerRating: 4.6,
-    isFavorite: true,
+    isFavorite: false,
     createdAt: '2023-10-09T10:20:00Z',
   },
   {
@@ -191,7 +191,7 @@ export const mockProducts: Product[] = [
     sellerId: '10',
     sellerName: 'Alex Thompson',
     sellerRating: 4.7,
-    isFavorite: true,
+    isFavorite: false,
     createdAt: '2023-10-06T12:30:00Z',
   },
   {
@@ -272,19 +272,6 @@ export const mockUsers: User[] = [
     isSeller: true,
     createdAt: '2022-04-22T11:20:00Z',
   },
-  // {
-  //   id: 'user',
-  //   name: 'Example User',
-  //   email: 'user@example.com',
-  //   password: 'password@@623',
-  //   location: 'Sample City',
-  //   profileImage: '',
-  //   bio: 'Temporary login user for development.',
-  //   rating: 0,
-  //   reviewCount: 0,
-  //   isSeller: false,
-  //   createdAt: '2024-01-01T00:00:00Z',
-  // },
 ];
 
 export const initializeMockData = () => {

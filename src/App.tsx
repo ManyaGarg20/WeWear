@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
@@ -7,6 +6,7 @@ import HomePage from './pages/HomePage';
 import BrowsePage from './pages/BrowsePage';
 import ProductPage from './pages/ProductPage';
 import SellerProfilePage from './pages/SellerProfilePage';
+import BecomeSellerPage from './pages/BecomeSellerPage';
 import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -37,6 +37,7 @@ function App() {
                 <Route path="/browse" element={<BrowsePage />} />
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/seller/:id" element={<SellerProfilePage />} />
+                <Route path="/become-seller" element={<BecomeSellerPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/login" element={<LoginPage />} />

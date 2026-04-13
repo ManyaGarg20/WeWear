@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
                 Start Shopping
               </Link>
               <Link
-                to="/signup?role=seller"
+                to="/become-seller"
                 className="bg-transparent hover:bg-indigo-800 transition-colors border-2 border-white font-medium rounded-md px-6 py-3 text-center"
               >
                 Become a Seller
@@ -177,7 +177,7 @@ const HomePage: React.FC = () => {
 
           <div className="text-center mt-12">
             <Link
-              to="/signup?role=seller"
+              to="/become-seller"
               className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md px-8 py-3 inline-block transition-colors"
             >
               Start Selling Today
