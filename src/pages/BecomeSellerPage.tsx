@@ -16,14 +16,13 @@ const BecomeSellerPage: React.FC = () => {
             <span className="text-2xl font-semibold">🚀 Coming Soon</span>
           </div>
         </div>
-
         {/* Features Preview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
             <BarChart3 className="h-12 w-12 text-blue-600 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Analytics Dashboard</h3>
             <p className="text-gray-600">
-              Track your sales, inventory, and customer insights in real-time
+              Track your sales, inventory,and customer insights in real-time
             </p>
           </div>
 
